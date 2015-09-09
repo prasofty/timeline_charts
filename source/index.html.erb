@@ -1,0 +1,189 @@
+---
+title: Timeline charts
+---
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="page-header">
+      <h2>Timeline Charts with Google Charts</h2>
+    </div>
+    <p class="lead">
+      Timeline charts are used to visualization the resources are used over time.
+      For example project tasks duration, schedule meeting or class rooms, people working durations and employees
+      working hours per week etc.,
+      <br><br>
+      Timeline charts are similar to bar charts but with specific time duration of the resources. Google chart
+      <a href="https://developers.google.com/chart/interactive/docs/gallery/timeline" target="_blank">timeline</a>
+      library one of the useful javascript chart
+      library to generate timeline charts.
+    </p>
+
+    <h3 class="page-header">Simple Example</h3>
+
+    <p>
+      Timeline chart for when american presidents served their terms. Here, the "resources" are the presidents, and each
+      president's term as a bar in graph.
+    </p>
+
+    <div id="timeline" style="height: 180px;"></div>
+
+    <p>Loading google charts api and required packages, There are two ways to load the required packages</p>
+
+        <pre class="prettyprint">
+            //loading in javascript
+            &lt;script type="text/javascript" src="https://www.google.com/jsapi"&gt;&lt;/script&gt;
+            ...
+            google.load("visualization", "1", {packages:["timeline"]});
+            ...
+        </pre>
+        <pre class="prettyprint">
+            //auto load through url params
+            &lt;script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
+                                                   'version':'1','packages':['timeline']}]}"&gt;&lt;/script&gt;
+        </pre>
+
+    <p>
+      After loading the timeline package and we need to defining <code>setOnLoadCallback</code> callback function
+      to draw the chart when the page is rendered.
+
+    <p>
+        <pre class="prettyprint">
+
+            google.setOnLoadCallback(drawChart);
+        </pre>
+
+    <p>In <code>drawChart()</code> method find the element which we need draw, create <code>chart</code> instantiates
+      method form <code>google.visualization.Timeline()</code>
+      passing the element as argument.
+    </p>
+        <pre class="prettyprint">
+
+             var container = document.getElementById('timeline');
+             var chart = new google.visualization.Timeline(container);
+        </pre>
+    <p>
+      Initialize <code>dataTable</code> form <code>google.visualization.DataTable()</code>, The <code>DataTable</code>
+      object is used to hold the data passed into a visualization, It is a two-dimensional table. All data in
+      each column must have the same data type. Fills a <code>dataTable</code> with one row of each resource and columns
+      defined data types.
+      <br><br>
+      In the example president's name, start and end times as respective columns in each <code>dateTable</code> row.
+    </p>
+        <pre class="prettyprint">
+
+            dataTable.addColumn({ type: 'string', id: 'Term' });
+            dataTable.addColumn({ type: 'string', id: 'Name' });
+            dataTable.addColumn({ type: 'date', id: 'Start' });
+            dataTable.addColumn({ type: 'date', id: 'End' });
+
+            dataTable.addRows([
+                [ '1', 'George Washington', new Date(1789, 3, 30), new Date(1797, 2, 4) ],
+                [ '2', 'John Adams',        new Date(1797, 2, 4),  new Date(1801, 2, 4) ],
+                [ '3', 'Thomas Jefferson',  new Date(1801, 2, 4),  new Date(1809, 2, 4) ]]);
+        </pre>
+
+    <p>
+      After defining the data into <code>dateTable</code> object, Invoke the <code>draw()</code> method of the
+      <code>chart</code> passing the <code>dataTable</code> object,
+      <code>draw()</code> method generates graph and displays it inside a div with the container was declared in the
+      visualization object.
+    </p>
+
+    <h3 class="page-header">Advanced Example</h3>
+
+    <p>
+      With this timeline charts we can handle more complex data and also summarized view. In the previous example let's
+      add
+      vice president and secretaries to charts.
+    </p>
+
+    <div id="timeline-adv"></div>
+    <p>
+      we can additional options to <code>draw()</code> method to control the chart view. view more
+      <a href="https://developers.google.com/chart/interactive/docs/gallery/timeline#configuration-options" target="_blank">options</a>
+    </p>
+        <pre class="prettyprint">
+
+            var options = {
+                timeline: {
+                    groupByRowLabel: true,
+                    colorByRowLabel: true,
+                    singleColor: '#8d8'
+                },
+                backgroundColor: '#ffd'
+            };
+
+            chart.draw(dataTable, options);
+        </pre>
+    <h3 class="page-header">Complex Example</h3>
+
+    <div class="row">
+      <div class="col-lg-7">
+        <p>
+          Previous examples in resources data has one time field duration. Let's look into multiple time durations for a
+          resource. For example
+          user check-in/check-out over week. Here we have week and check-in/out times are the date time objects. In each
+          day user have multiple
+          check-in/check-out times.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <p>
+          Sample date with user check-in/check-out times
+        </p>
+        <table class="table">
+          <tr>
+            <td>
+              Check-in
+            </td>
+            <td>
+              Check-out
+            </td>
+          </tr>
+          <tr>
+            <td>
+              2015-09-08 10:00
+            </td>
+            <td>
+              2015-09-08 11:30
+            </td>
+          </tr>
+          <tr>
+            <td>
+              2015-09-08 14:00
+            </td>
+            <td>
+              2015-09-08 16:30
+            </td>
+          </tr>
+          <tr>
+            <td>
+              2015-09-09 16:00
+            </td>
+            <td>
+              2015-09-09 19:30
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">...</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <p class="timeline-complex-header-label text-center">
+      <span class="start-week label label-default">
+          s
+      </span>
+      &nbsp;&nbsp;-&nbsp;&nbsp;
+      <span class="end-week label label-default">
+        a
+      </span>
+    </p>
+    <div id="timeline-complex"></div>
+    <p class="text-center">
+      <button type="button" class="btn btn-default btn-xs prev-week">Prev week</button>
+      <button type="button" class="btn btn-default btn-xs next-week">Next week</button>
+    </p>
+  </div>
+</div>
+
